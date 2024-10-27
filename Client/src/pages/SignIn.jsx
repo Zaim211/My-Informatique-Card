@@ -9,7 +9,7 @@ const SignIn = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate(); // Initialize navigate for navigation
+  const navigate = useNavigate();
 
   const handleEmailChange = (event) => setEmail(event.target.value);
   const handlePasswordChange = (event) => setPassword(event.target.value);
@@ -20,8 +20,11 @@ const SignIn = () => {
     try {
       const response = await axios.post('/login', { email, password });
       if (response.status === 200) {
-        // Handle successful login (e.g., redirect to user profile)
-        navigate(`/cardUser/${response.data.userId}`); // Example redirect
+        // // Handle successful login (e.g., redirect to user profile)
+        // navigate(`/cardUser/${response.data.userId}`); // Example redirect
+        console.log("responsesignIn", response.data); // Check the response structure
+        const userId = response.data.user.id; // Extract userId from the response
+        navigate(`/cardUser/${userId}`); 
       }
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
