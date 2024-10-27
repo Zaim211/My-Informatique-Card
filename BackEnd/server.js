@@ -26,7 +26,7 @@ app.use(express.json());
 
 // middleware to connect with frontend
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://my-informatique-card.vercel.app/",
     credentials: true,
 }));
 
