@@ -36,11 +36,13 @@ import {
 
 
 const ScanForm = () => {
-  const { userId } = useParams();
+  const { userId, id } = useParams();
+  console.log("userIdscan:", userId);
   const [ready, setReady] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const [portfolioImages, setPortfolioImages] = useState([]);
+  
 
   const [redirect, setRedirect] = useState(false);
 
@@ -109,8 +111,10 @@ const ScanForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const apiUrl = `/scanForm/${userId}`;
-      const method = formData.firstName ? "PUT" : "POST";
+      const isUpdate = Boolean(formData._id); 
+      console.log("isUpdate:", isUpdate);
+      const apiUrl = isUpdate ? `/scanForm/${formData._id}` : `/scanForm/${userId}`;
+      const method = isUpdate ? "PUT" : "POST";
       const dataToSubmit = {
         ...formData,
         imageUrl,
