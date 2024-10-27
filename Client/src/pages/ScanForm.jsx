@@ -611,7 +611,7 @@ const ScanForm = () => {
                   </p>
 
                   {/* Display uploaded images */}
-                  <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex flex-wrap items-center justify-center gap-4">
                     {formData.portfolioImages.length > 0 ? (
                       formData.portfolioImages.map((image, index) => (
                         <div key={index} className="relative">

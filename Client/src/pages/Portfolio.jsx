@@ -91,7 +91,7 @@ const Portfolio = () => {
         {/* About Section */}
         {data.bio && (
           <div>
-            <h3 className="text-xl font-bold text-gray-700 mb-2">A props:</h3>
+            <h3 className="text-xl font-bold text-gray-700 mb-2 mt-6">A props:</h3>
             <p className="text-gray-700">{data.bio}</p>
           </div>
         )}
