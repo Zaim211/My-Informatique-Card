@@ -105,7 +105,7 @@
 //             />
 //           </div>
 //         </div>
-//         <button type="submit" 
+//         <button type="submit"
 //           className="w-full bg-blue-600 hover:bg-blue-700 transition ease-in-out duration-300 text-white font-medium rounded-lg text-sm px-5 py-3 text-center">
 //           Créer un compte
 //         </button>
@@ -116,23 +116,30 @@
 // };
 
 // export default AccountCreation;
-import React, { useState } from 'react';
+
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLock, faEnvelope, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import axios from 'axios';
-import ConfirmationAccount from './ConfirmationAccount';
+import {
+  faLock,
+  faEnvelope,
+  faEye,
+  faEyeSlash,
+} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { Link, Navigate } from "react-router-dom";
 
 const AccountCreation = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(false);
+  const [redirect, setRedirect] = useState(false);
 
   const handleEmailChange = (event) => setEmail(event.target.value);
   const handlePasswordChange = (event) => setPassword(event.target.value);
-  const handleConfirmPasswordChange = (event) => setConfirmPassword(event.target.value);
+  const handleConfirmPasswordChange = (event) =>
+    setConfirmPassword(event.target.value);
   const toggleShowPassword = () => setShowPassword((prevState) => !prevState);
 
   const handleSubmit = async (e) => {
@@ -142,30 +149,41 @@ const AccountCreation = () => {
       return;
     }
     try {
-      const response = await axios.post('/register', { email, password });
+      const response = await axios.post("/register", { email, password });
       if (response.status === 201) {
-        setIsRegistered(true);
+        setRedirect(true);
       }
     } catch (error) {
       console.error("Erreur lors de l'inscription :", error);
       setMessage("Une erreur est survenue lors de l'inscription.");
     }
   };
-
-  if (isRegistered) return <ConfirmationAccount />;
-
+  if (redirect) {
+    return <Navigate to={'/confirmation'} />;
+  }
   return (
-    <div className="min-h-screen max-w-4xl bg-gradient-to-b from-gray-900 via-gray-800 w-full to-gray-700 flex items-center justify-center">
+    <div className="min-h-screen max-w-4xl bg-gradient-to-b p-4 from-gray-900 via-gray-800 w-full to-gray-700 flex items-center justify-center">
       <div className="w-full max-w-4xl p-8 bg-gray-800 shadow-lg rounded-lg">
-        <h2 className="text-2xl font-semibold text-gray-100 mb-6 text-center">Création de compte</h2>
+        <h2 className="text-2xl font-semibold text-gray-100 mb-6 text-center">
+          Création de compte
+        </h2>
         <p className="text-md text-gray-300 mb-8 text-center">
-          Saisissez votre email professionnel et un mot de passe pour accéder à My-InfoCard.
+          Saisissez votre email professionnel et un mot de passe pour accéder à
+          My-InfoCard.
         </p>
         <form onSubmit={handleSubmit} className="space-y-6 w-full">
           <div>
-            <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-300">Votre email</label>
+            <label
+              htmlFor="email"
+              className="block mb-2 text-sm font-medium text-gray-300"
+            >
+              Votre email
+            </label>
             <div className="flex items-center border border-gray-500 rounded-lg bg-gray-700">
-              <FontAwesomeIcon icon={faEnvelope} className="text-gray-400 mx-3" />
+              <FontAwesomeIcon
+                icon={faEnvelope}
+                className="text-gray-400 mx-3"
+              />
               <input
                 type="email"
                 id="email"
@@ -178,7 +196,12 @@ const AccountCreation = () => {
             </div>
           </div>
           <div>
-            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-300">Mot de passe</label>
+            <label
+              htmlFor="password"
+              className="block mb-2 text-sm font-medium text-gray-300"
+            >
+              Mot de passe
+            </label>
             <div className="flex items-center border border-gray-500 rounded-lg bg-gray-700">
               <FontAwesomeIcon icon={faLock} className="text-gray-400 mx-3" />
               <input
@@ -198,7 +221,12 @@ const AccountCreation = () => {
             </div>
           </div>
           <div>
-            <label htmlFor="confirmPassword" className="block mb-2 text-sm font-medium text-gray-300">Confirmez le mot de passe</label>
+            <label
+              htmlFor="confirmPassword"
+              className="block mb-2 text-sm font-medium text-gray-300"
+            >
+              Confirmez le mot de passe
+            </label>
             <div className="flex items-center border border-gray-500 rounded-lg bg-gray-700">
               <FontAwesomeIcon icon={faLock} className="text-gray-400 mx-3" />
               <input
@@ -220,6 +248,13 @@ const AccountCreation = () => {
           </button>
         </form>
         {message && <p className="text-red-500 mt-4 text-center">{message}</p>}
+        {/* Sign In Link */}
+        <p className="text-gray-300 mt-4 text-center">
+          Vous avez déjà un compte?
+          <Link to="/SignIn" className="text-blue-400 hover:underline ml-1">
+            Se connecter
+          </Link>
+        </p>
       </div>
     </div>
   );
