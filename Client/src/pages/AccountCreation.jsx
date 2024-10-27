@@ -162,7 +162,7 @@ const AccountCreation = () => {
     return <Navigate to={'/confirmation'} />;
   }
   return (
-    <div className="min-h-screen max-w-4xl bg-gradient-to-b p-4 from-gray-900 via-gray-800 w-full to-gray-700 flex items-center justify-center">
+    <div className="min-h-screen  bg-gradient-to-b p-4 from-gray-900 via-gray-800 w-full to-gray-700 flex items-center justify-center">
       <div className="w-full max-w-4xl p-8 bg-gray-800 shadow-lg rounded-lg">
         <h2 className="text-2xl font-semibold text-gray-100 mb-6 text-center">
           Création de compte
@@ -171,7 +171,7 @@ const AccountCreation = () => {
           Saisissez votre email professionnel et un mot de passe pour accéder à
           My-InfoCard.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-6 w-full">
+        <form onSubmit={handleSubmit} className="space-y-6 max-w-lg w-full">
           <div>
             <label
               htmlFor="email"
