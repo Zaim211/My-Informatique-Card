@@ -7,7 +7,7 @@ router.get("/", AppController.MyInfoCard);
 router.post('/register', AuthenticationController.register);
 router.get('/verify/:token', AuthenticationController.verify);
 
-router.post('/scanForm/:id', AuthenticationController.scanFormClient);
+router.post('/scanForm/:userId', AuthenticationController.scanFormClient);
 router.put('/scanForm/:id', AuthenticationController.updateForm)
 router.get('/scanForm/:id', AuthenticationController.getScanForm);
 

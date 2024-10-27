@@ -107,41 +107,114 @@ class AuthenticationController {
   }
 
  
-
-  static async scanFormClient(req, res) {
-    try {
-      // Extract userId from the route parameter
-      const userId = req.params.id;
-  
-      // Create the form data, including the userId
-      const newForm = new ScanForm({
-        ...req.body,  // Spread the form data from the body
-        userId,       // Attach the userId to the form
-      });
-  
-      // Save the new form in the database
-      await newForm.save();
-  
-      // Respond with a success message
-      res.status(201).json({
-        message: 'Form submitted successfully!',
-        form: newForm,
-      });
-    } catch (error) {
-      // Handle any errors that occur during submission
-      console.error(error);
-      res.status(500).json({
-        message: 'An error occurred while submitting the form.',
-        error: error.message,
-      });
+    // Create (POST) - expects userId in the route parameter
+    static async scanFormClient(req, res) {
+      try {
+        const userId = req.params.userId;
+        const newForm = new ScanForm({
+          ...req.body,
+          userId,
+        });
+        await newForm.save();
+        res.status(201).json({
+          message: 'Form submitted successfully!',
+          form: newForm,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          message: 'An error occurred while submitting the form.',
+          error: error.message,
+        });
+      }
     }
-  }
+  
+    // Update (PUT) - expects _id of the form in the route parameter
+    static async updateForm(req, res) {
+      try {
+        const formId = req.params.id;
+        const updatedForm = await ScanForm.findByIdAndUpdate(
+          formId,
+          { ...req.body },
+          { new: true, runValidators: true }
+        );
+        if (!updatedForm) {
+          return res.status(404).json({ message: 'Form not found' });
+        }
+        res.json({
+          message: 'Form updated successfully!',
+          form: updatedForm,
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({
+          message: 'An error occurred while updating the form.',
+          error: error.message,
+        });
+      }
+    }
+  
+  
+
+  // static async scanFormClient(req, res) {
+  //   try {
+  //     // Extract userId from the route parameter
+  //     const userId = req.params.id;
+  
+  //     // Create the form data, including the userId
+  //     const newForm = new ScanForm({
+  //       ...req.body,  // Spread the form data from the body
+  //       userId,       // Attach the userId to the form
+  //     });
+  
+  //     // Save the new form in the database
+  //     await newForm.save();
+  
+  //     // Respond with a success message
+  //     res.status(201).json({
+  //       message: 'Form submitted successfully!',
+  //       form: newForm,
+  //     });
+  //   } catch (error) {
+  //     // Handle any errors that occur during submission
+  //     console.error(error);
+  //     res.status(500).json({
+  //       message: 'An error occurred while submitting the form.',
+  //       error: error.message,
+  //     });
+  //   }
+  // }
+  // static async updateForm(req, res) {
+  //   try {
+  //     const userId = req.params.id;
+  
+  //     const updatedForm = await ScanForm.findOneAndUpdate(
+  //       { userId },
+  //       { ...req.body },
+  //       { new: true, runValidators: true }
+  //     );
+  
+  //     if (!updatedForm) {
+  //       return res.status(404).json({ message: 'Form not found' });
+  //     }
+  //     res.json({
+  //       message: 'Form updated successfully!',
+  //       form: updatedForm,
+  //     });
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({
+  //       message: 'An error occurred while updating the form.',
+  //       error: error.message,
+  //     });
+  //   }
+  // }
 
   static async getScanForm(req, res) {
     try {
 
       const formData = await ScanForm.findOne({ userId: req.params.id })
-
+      console.log('formData', formData);
       if (!formData) return res.status(404).send("Data not found");
       res.json(formData);
     } catch (error) {
@@ -149,31 +222,6 @@ class AuthenticationController {
     }
   }
 
-  static async updateForm(req, res) {
-    try {
-      const userId = req.params.id;
-  
-      const updatedForm = await ScanForm.findOneAndUpdate(
-        { userId },
-        { ...req.body },
-        { new: true, runValidators: true }
-      );
-  
-      if (!updatedForm) {
-        return res.status(404).json({ message: 'Form not found' });
-      }
-      res.json({
-        message: 'Form updated successfully!',
-        form: updatedForm,
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        message: 'An error occurred while updating the form.',
-        error: error.message,
-      });
-    }
-  }
 }
 
 module.exports = AuthenticationController;
