@@ -12,7 +12,7 @@ node_modules
 dist
 dist-ssr
 *.local
-Backend/.env
+BackEnd/.env
 Client/.env
 
 # Editor directories and files
