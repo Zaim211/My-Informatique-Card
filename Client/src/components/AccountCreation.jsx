@@ -157,7 +157,7 @@ const AccountCreation = () => {
   return (
     <div className="min-h-screen max-w-4xl bg-gradient-to-b from-gray-900 via-gray-800 w-full to-gray-700 flex items-center justify-center">
       <div className="w-full max-w-4xl p-8 bg-gray-800 shadow-lg rounded-lg">
-        <h2 className="text-3xl font-semibold text-gray-100 mb-6 text-center">Création de compte</h2>
+        <h2 className="text-2xl font-semibold text-gray-100 mb-6 text-center">Création de compte</h2>
         <p className="text-md text-gray-300 mb-8 text-center">
           Saisissez votre email professionnel et un mot de passe pour accéder à My-InfoCard.
         </p>

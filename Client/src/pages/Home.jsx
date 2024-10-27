@@ -67,8 +67,8 @@ const Home = () => {
         <>
           {/* Header Section */}
           <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-gray-100 mb-6 tracking-wide drop-shadow-lg">
-              Bienvenue sur <span className="text-blue-400">MyInfoCard</span>
+            <h1 className="text-3xl font-bold text-gray-100 mb-6 tracking-wide drop-shadow-lg">
+              Bienvenue sur <span className="text-blue-400 text-3xl ">MyInfoCard</span>
             </h1>
             <p className="text-lg text-gray-200 mb-4 max-w-lg mx-auto leading-relaxed">
               Créez, gérez et montrez facilement vos informations personnelles. 
