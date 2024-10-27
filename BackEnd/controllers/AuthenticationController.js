@@ -97,7 +97,7 @@ class AuthenticationController {
       await user.save();
 
       // Redirect to the front-end URL
-      res.redirect(`http://localhost:5173/card/${user._id}`); // Adjust the URL as needed
+      res.redirect(`https://my-informatique-card.vercel.app/card/${user._id}`); // Adjust the URL as needed
     } catch (error) {
       console.error("Error verifying account:", error);
       res
