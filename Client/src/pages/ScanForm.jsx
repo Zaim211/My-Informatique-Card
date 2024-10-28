@@ -590,8 +590,7 @@ const ScanForm = () => {
             <div>
               <h3 className="text-2xl font-bold mb-2">À Propos de Vous</h3>
               <p className="mb-4 text-gray-600">
-                Présentez-vous, partagez vos projets et vos passions. C'est
-                votre première impression numérique pour vos rencontres.
+              Veuillez télécharger les photos de votre société pour mettre en valeur votre portfolio.
               </p>
               <form onSubmit={handleSubmit}>
                 <div className="mb-4 flex items-start">
