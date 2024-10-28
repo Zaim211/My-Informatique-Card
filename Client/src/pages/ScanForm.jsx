@@ -74,6 +74,15 @@ const ScanForm = () => {
         const response = await axios.get(`/scanForm/${userId}`);
         if (response.data) {
           setFormData(response.data);
+          setImageUrl(response.data.imageUrl);
+        }
+        console.log('response:', response);
+        if (response.data.videoUrl) {
+          const id = extractVideoID(response.data.videoUrl);
+          if (id) {
+            setVideoID(id);
+            setIsVideoAdded(true);
+          }
         }
         console.log("response:", response);
       } catch (error) {
@@ -84,32 +93,6 @@ const ScanForm = () => {
     fetchExistingData();
   }, [userId]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handlePhoneChange = (value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      phone: value,
-    }));
-  };
-
-  const handleNextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, 4)); // Limit to 4 pages
-  };
-
-  const handleSkipPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, 4)); // Skip current page
-  };
-
-  const handlePrevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1)); // Limit to 1 page
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -142,6 +125,35 @@ const ScanForm = () => {
       console.error("Submission failed", error);
     }
   };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handlePhoneChange = (value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      phone: value,
+    }));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, 4)); // Limit to 4 pages
+  };
+
+  const handleSkipPage = () => {
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, 4)); // Skip current page
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1)); // Limit to 1 page
+  };
+
+ 
 
   const handleSocialChange = (selectedOption) => {
     setFormData({
@@ -296,36 +308,6 @@ const ScanForm = () => {
     message.success("Image removed successfully");
   };
 
-  // const getYouTubeId = (url) => {
-  //   const regex =
-  //     /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&\n]{11})/;
-  //   const match = url.match(regex);
-  //   return match ? match[1] : null; // Return the video ID or null
-  // };
-
-  // const handleAddVideo = () => {
-  //   // You might want to add some validation here
-  //   if (formData.videoUrl) {
-  //     // Process the video URL, for example, save it or display it
-  //     console.log("Video URL added:", formData.videoUrl);
-  //     // Optionally clear the input after adding
-  //     setFormData({ ...formData, videoUrl: "" });
-  //   } else {
-  //     alert("Please enter a valid YouTube URL");
-  //   }
-  // };
-  
-  
-  // const handleAddVideo = () => {
-  //   // Simple validation to check if the URL field is not empty
-  //   if (formData.videoUrl) {
-  //     console.log("Video URL added:", formData.videoUrl);
-  //     setIsVideoAdded(true); // Mark the video as added
-  //     setFormData({ ...formData, videoUrl: '' }); // Clear the input field
-  //   } else {
-  //     alert("Please enter a valid YouTube URL");
-  //   }
-  // };
 
   const handleAddVideo = () => {
     const id = extractYouTubeID(formData.videoUrl);
