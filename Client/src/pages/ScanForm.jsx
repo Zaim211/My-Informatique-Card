@@ -99,7 +99,7 @@ const ScanForm = () => {
     try {
       const isUpdate = Boolean(formData._id); 
       console.log("isUpdate:", isUpdate);
-      const apiUrl = isUpdate ? `/scanForm/${formData._id}` : `/scanForm/${formData._id}`;
+      const apiUrl = isUpdate ? `/scanForm/${formData._id}` : `/scanForm/${userId}`;
       const method = isUpdate ? "PUT" : "POST";
       const dataToSubmit = {
         ...formData,
