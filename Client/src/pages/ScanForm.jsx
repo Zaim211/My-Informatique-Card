@@ -332,7 +332,7 @@ const ScanForm = () => {
     if (id) {
       setVideoID(id);
       setIsVideoAdded(true);
-      setFormData({ ...formData, videoUrl: '' });
+      setFormData({ ...formData });
     } else {
       alert("Please enter a valid YouTube URL");
       setIsVideoAdded(false);
