@@ -230,9 +230,9 @@ const ScanForm = () => {
 
   const uploadProps = {
     name: "file",
-    action: "https://api.cloudinary.com/v1_1/doagzivng/image/upload",
+    action: "https://api.cloudinary.com/v1_1/dltbbvgop/image/upload",
     data: {
-      upload_preset: "kj1jodbh",
+      upload_preset: "Myinfo",
     },
     showUploadList: false,
     onChange: handleUploadChange,
@@ -251,6 +251,7 @@ const ScanForm = () => {
 
     if (info.file.status === "done") {
       const imagesUrl = info.file.response.secure_url;
+      console.log("imagesUrl:", imagesUrl);
 
       setFormData((prev) => ({
         ...prev,
@@ -273,14 +274,15 @@ const ScanForm = () => {
 
   const uploadProp = {
     name: "file",
-    action: "https://api.cloudinary.com/v1_1/doagzivng/image/upload",
+    action: "https://api.cloudinary.com/v1_1/dltbbvgop/image/upload",
     data: {
-      upload_preset: "kj1jodbh",
+      upload_preset: "Myinfo",
     },
     showUploadList: false,
     onChange: handleUploadedChange,
     multiple: true,
   };
+  console.log('uploadProp:', uploadProp);
 
   const handleDeleteImages = (index) => {
     const updatedImages = formData.portfolioImages.filter(
