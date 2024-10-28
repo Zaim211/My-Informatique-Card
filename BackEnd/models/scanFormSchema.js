@@ -18,19 +18,19 @@ const scanFormSchema = new mongoose.Schema(
     },
     company: {
       type: String,
-      required: true,
+  
     },
     jobTitle: {
       type: String,
-      required: true,
+  
     },
     phone: {
       type: String,
-      required: true,
+
     },
     email: {
       type: String,
-      required: true,
+
       match: /.+\@.+\..+/,
     },
     website: {
@@ -39,7 +39,7 @@ const scanFormSchema = new mongoose.Schema(
     },
     address: {
       type: String,
-      required: true,
+   
     },
     bio: {
       type: String,
