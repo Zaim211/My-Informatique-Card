@@ -14,6 +14,7 @@ import {
   FaArrowLeft
 } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
+import YouTube from "react-youtube";
 
 const Portfolio = () => {
   const [data, setData] = useState({});
@@ -42,7 +43,10 @@ const Portfolio = () => {
   const truncateUrl = (url, maxLength = 25) => {
     return url.length > maxLength ? `${url.slice(0, maxLength)}...` : url;
   };
-
+  const extractYouTubeID = (url) => {
+    const match = url.match(/(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube.com\/embed\/)([^"&?/ ]{11})/);
+    return match ? match[1] : null;
+  };
   return (
     <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 md:flex">
       {/* Back to Edit Form Button */}
@@ -157,19 +161,44 @@ const Portfolio = () => {
         )}
 
         {/* Video Section */}
-        {data.videoUrl && (
+        {/* {data.videoUrl && (
           <div>
             <h3 className="text-xl font-bold text-gray-700 mb-2">Video</h3>
             <div className="aspect-w-16 aspect-h-9">
-              <iframe
+              <YouTube
+              videoUrl={data.videoUrl}
                 src={`https://www.youtube.com/embed/${new URL(
                   data.videoUrl
                 ).searchParams.get("v")}`}
-                title="YouTube video"
-                frameBorder="0"
-                allowFullScreen
-                className="w-full rounded-lg shadow-md"
-              ></iframe>
+                opts={{
+                  width: '100%',
+                  height: '315',
+                  playerVars: {
+                    autoplay: 0,
+                    controls: 1,
+                    modestbranding: 1,
+                  },
+                }}
+              />
+            </div>
+          </div>
+        )} */}
+         {data.videoUrl && (
+          <div>
+            <h3 className="text-xl font-bold text-gray-700 mb-2">Video</h3>
+            <div className="aspect-w-16 aspect-h-9">
+              <YouTube
+                videoId={extractYouTubeID(data.videoUrl)}
+                opts={{
+                  width: '100%',
+                  playerVars: {
+                    autoplay: 0,
+                    controls: 1,
+                    modestbranding: 1,
+                  },
+                }}
+                className="rounded-lg shadow-md"
+              />
             </div>
           </div>
         )}

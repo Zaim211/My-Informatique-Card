@@ -13,6 +13,7 @@ import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Upload, message, Button } from "antd";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
+import YouTube from 'react-youtube';
 
 const socialMediaOptions = [
   { value: "instagram", label: "Instagram", logo: instagram },
@@ -36,12 +37,13 @@ import {
 
 
 const ScanForm = () => {
-  const { userId, id } = useParams();
+  const { userId} = useParams();
   console.log("userIdscan:", userId);
   const [ready, setReady] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const [portfolioImages, setPortfolioImages] = useState([]);
+  const [videoID, setVideoID] = useState(null);
   
 
   const [redirect, setRedirect] = useState(false);
@@ -64,6 +66,7 @@ const ScanForm = () => {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [isVideoAdded, setIsVideoAdded] = useState(false);
 
   useEffect(() => {
     const fetchExistingData = async () => {
@@ -291,23 +294,55 @@ const ScanForm = () => {
     message.success("Image removed successfully");
   };
 
-  const getYouTubeId = (url) => {
-    const regex =
-      /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&\n]{11})/;
-    const match = url.match(regex);
-    return match ? match[1] : null; // Return the video ID or null
-  };
+  // const getYouTubeId = (url) => {
+  //   const regex =
+  //     /(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^&\n]{11})/;
+  //   const match = url.match(regex);
+  //   return match ? match[1] : null; // Return the video ID or null
+  // };
+
+  // const handleAddVideo = () => {
+  //   // You might want to add some validation here
+  //   if (formData.videoUrl) {
+  //     // Process the video URL, for example, save it or display it
+  //     console.log("Video URL added:", formData.videoUrl);
+  //     // Optionally clear the input after adding
+  //     setFormData({ ...formData, videoUrl: "" });
+  //   } else {
+  //     alert("Please enter a valid YouTube URL");
+  //   }
+  // };
+  
+  
+  // const handleAddVideo = () => {
+  //   // Simple validation to check if the URL field is not empty
+  //   if (formData.videoUrl) {
+  //     console.log("Video URL added:", formData.videoUrl);
+  //     setIsVideoAdded(true); // Mark the video as added
+  //     setFormData({ ...formData, videoUrl: '' }); // Clear the input field
+  //   } else {
+  //     alert("Please enter a valid YouTube URL");
+  //   }
+  // };
 
   const handleAddVideo = () => {
-    // You might want to add some validation here
-    if (formData.videoUrl) {
-      // Process the video URL, for example, save it or display it
-      console.log("Video URL added:", formData.videoUrl);
-      // Optionally clear the input after adding
-      setFormData({ ...formData, videoUrl: "" });
+    const id = extractYouTubeID(formData.videoUrl);
+    if (id) {
+      setVideoID(id);
+      setIsVideoAdded(true);
+      setFormData({ ...formData, videoUrl: '' });
     } else {
       alert("Please enter a valid YouTube URL");
+      setIsVideoAdded(false);
     }
+  };
+
+  const extractYouTubeID = (url) => {
+    // Matches common YouTube URL formats and extracts video ID
+    const match = url.match(
+      /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube.com\/embed\/)([^"&?/ ]{11})/
+    );
+    return match ? match[1] : null;
   };
 
   if (redirect) {
@@ -709,7 +744,7 @@ const ScanForm = () => {
               </div>
 
               {/* Add YouTube Video Upload */}
-              <div className="mb-4 mt-12">
+              {/* <div className="mb-4 mt-12">
                 <h3 className="text-xl font-bold mb-2">Add YouTube Video</h3>
                 <input
                   type="url"
@@ -723,15 +758,56 @@ const ScanForm = () => {
                 />
                 <button
                   type="button"
-                  onClick={handleAddVideo} // Add a function to handle video addition
+                  onClick={handleAddVideo}
                   className="mt-2 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600"
                 >
                   Add Video
                 </button>
-              </div>
+              </div> */}
+<div className="mb-4 mt-12">
+      <h3 className="text-xl font-bold mb-2">Add YouTube Video</h3>
+      <input
+        type="url"
+        placeholder="Enter YouTube Video URL"
+        value={formData.videoUrl}
+        onChange={(e) =>
+          setFormData({ ...formData, videoUrl: e.target.value })
+        }
+        className="border-0 border-b border-gray-500 p-1 w-full text-sm placeholder-gray-700 focus:outline-none focus:border-b-2 focus:border-gray-500"
+        required
+      />
+      <button
+        type="button"
+        onClick={handleAddVideo}
+        className="mt-2 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600"
+      >
+        Add Video
+      </button>
 
+      {isVideoAdded && videoID && (
+        <div className="mt-4">
+           <div className="flex justify-center mt-4">
+          <div className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2">
+            <YouTube
+              videoId={videoID}
+              opts={{
+                width: '100%',
+                height: '315',
+                playerVars: {
+                  autoplay: 0,
+                  controls: 1,
+                  modestbranding: 1,
+                },
+              }}
+              className="youtube-video"
+            />
+          </div>
+        </div>
+        </div>
+      )}
+    </div>
               {/* Display YouTube Video */}
-              {formData.videoUrl && (
+              {/* {formData.videoUrl && (
                 <div className="mb-4">
                   <h4 className="text-lg font-bold">Uploaded Video:</h4>
                   <iframe
@@ -747,7 +823,7 @@ const ScanForm = () => {
                     className="mt-2 w-[100%] h-[315px] rounded-md"
                   ></iframe>
                 </div>
-              )}
+              )} */}
             </div>
           )}
 
