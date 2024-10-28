@@ -48,7 +48,7 @@ const Portfolio = () => {
     return match ? match[1] : null;
   };
   return (
-    <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-8 md:flex">
+    <div className="max-w-4xl flex-1 mx-auto bg-white shadow-lg rounded-lg p-8">
       {/* Back to Edit Form Button */}
       <div className="absolute top-4 left-4">
         <Link to={`/cardUser/${userId}`} className="text-black underline">
@@ -56,7 +56,7 @@ const Portfolio = () => {
         </Link>
       </div>
       {/* Sidebar - Profile Image and Contact */}
-      <div className="md:w-1/3 text-center md:border-r md:pr-8">
+      <div className=" text-center md:border-r md:pr-8">
         <img
           src={data.imageUrl}
           alt="Profile"
@@ -91,7 +91,7 @@ const Portfolio = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="md:w-2/3 md:pl-8 space-y-6">
+      <div className="md:pl-8 space-y-6">
         {/* About Section */}
         {data.bio && (
           <div>

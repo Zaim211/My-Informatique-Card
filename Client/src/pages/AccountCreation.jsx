@@ -171,8 +171,8 @@ const AccountCreation = () => {
           Saisissez votre email professionnel et un mot de passe pour accéder à
           My-InfoCard.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-6 max-w-lg w-full">
-          <div>
+        <form onSubmit={handleSubmit} className="space-y-6 w-full">
+          <div className="">
             <label
               htmlFor="email"
               className="block mb-2 text-sm font-medium text-gray-300"
@@ -189,7 +189,7 @@ const AccountCreation = () => {
                 id="email"
                 value={email}
                 onChange={handleEmailChange}
-                className="w-full p-3 bg-gray-700 text-white placeholder-gray-500 focus:outline-none"
+                className="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-500 focus:outline-none"
                 placeholder="nom@entreprise.com"
                 required
               />

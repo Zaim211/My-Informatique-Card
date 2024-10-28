@@ -49,7 +49,7 @@ const SignIn = () => {
                 id="email"
                 value={email}
                 onChange={handleEmailChange}
-                className="w-full p-3 bg-gray-700 text-white placeholder-gray-500 focus:outline-none"
+                className="w-full p-3 bg-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none"
                 placeholder="nom@entreprise.com"
                 required
               />
