@@ -315,7 +315,7 @@ const Portfolio = () => {
       rel="noopener noreferrer"
       className="text-gray-600 font-bold"
     >
-      {truncateUrl(data.website)}
+      {data.website}
     </a>
   </div>
   
