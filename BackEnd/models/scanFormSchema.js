@@ -18,15 +18,12 @@ const scanFormSchema = new mongoose.Schema(
     },
     company: {
       type: String,
-  
     },
     jobTitle: {
       type: String,
-  
     },
     phone: {
       type: String,
-
     },
     email: {
       type: String,
@@ -39,23 +36,24 @@ const scanFormSchema = new mongoose.Schema(
     },
     address: {
       type: String,
-   
     },
     bio: {
       type: String,
       default: "",
     },
-    // socialLinks: {type:[String]},
+
     socialLinks: {
-      type: Map, // Using Map to define an object-like structure
-      of: String, // Each key in the map will be a string (URL)
-      default: {}, // Default to an empty object
+      type: Map,
+      of: String,
+      default: {},
     },
     imageUrl: { type: String },
     videoUrl: { type: String },
     portfolioImages: { type: [String] },
-  },
-  { timestamps: true }
+    portfolioImage: { type: String },
+    portfolioTitle: { type: String },
+    portfolioDescription: { type: String },
+  }, { timestamps: true }
 );
 
 const ScanForm = mongoose.model("ScanForm", scanFormSchema);
