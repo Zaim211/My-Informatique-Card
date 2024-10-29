@@ -24,7 +24,7 @@ const SignIn = () => {
         // navigate(`/cardUser/${response.data.userId}`); // Example redirect
         console.log("responsesignIn", response.data); // Check the response structure
         const userId = response.data.user.id; // Extract userId from the response
-        navigate(`/cardUser/${userId}`); 
+        navigate(`/cardInfo/${userId}`); 
       }
     } catch (error) {
       console.error("Erreur lors de la connexion :", error);
