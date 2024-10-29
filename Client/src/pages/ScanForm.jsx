@@ -13,7 +13,7 @@ import { Navigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Upload, message, Button } from "antd";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
-import YouTube from 'react-youtube';
+import YouTube from "react-youtube";
 
 const socialMediaOptions = [
   { value: "instagram", label: "Instagram", logo: instagram },
@@ -35,16 +35,14 @@ import {
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
 
-
 const ScanForm = () => {
-  const { userId} = useParams();
+  const { userId } = useParams();
   console.log("userIdscan:", userId);
   const [ready, setReady] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [portfolioImages, setPortfolioImages] = useState([]);
+  const [portfolioImages, setPortfolioImages] = useState("");
   const [videoID, setVideoID] = useState(null);
-  
 
   const [redirect, setRedirect] = useState(false);
 
@@ -63,6 +61,10 @@ const ScanForm = () => {
     videoUrl: "",
     imageUrl: "",
     portfolioImages: [],
+    portfolioUrl: "",
+    portfolioTitle: "",
+portfolioDescription: "",
+portfolioImage: "",
   });
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,15 +77,16 @@ const ScanForm = () => {
         if (response.data) {
           setFormData(response.data);
           setImageUrl(response.data.imageUrl);
+          // setPortfolioImages(response.data.portfolioImage);
         }
-        console.log('response:', response);
-        if (response.data.videoUrl) {
-          const id = extractVideoID(response.data.videoUrl);
-          if (id) {
-            setVideoID(id);
-            setIsVideoAdded(true);
-          }
-        }
+        console.log("response:", response);
+        // if (response.data.videoUrl) {
+        //   const id = extractVideoID(response.data.videoUrl);
+        //   if (id) {
+        //     setVideoID(id);
+        //     setIsVideoAdded(true);
+        //   }
+        // }
         console.log("response:", response);
       } catch (error) {
         console.error("Error fetching existing data:", error);
@@ -93,18 +96,20 @@ const ScanForm = () => {
     fetchExistingData();
   }, [userId]);
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const isUpdate = Boolean(formData._id); 
+      const isUpdate = Boolean(formData._id);
       console.log("isUpdate:", isUpdate);
-      const apiUrl = isUpdate ? `/scanForm/${formData._id}` : `/scanForm/${userId}`;
+      const apiUrl = isUpdate
+        ? `/scanForm/${formData._id}`
+        : `/scanForm/${userId}`;
       const method = isUpdate ? "PUT" : "POST";
       const dataToSubmit = {
         ...formData,
         imageUrl: formData.imageUrl,
         portfolioImages: formData.portfolioImages,
+        portfolioImage: formData.portfolioImage,
       };
 
       const response = await axios({
@@ -134,6 +139,19 @@ const ScanForm = () => {
     }));
   };
 
+  const handleChangeWithWordLimit = (e) => {
+    const { value, name } = e.target;
+    const wordCount = value.split(' ').filter(word => word).length;
+  
+    // Update only if the word count is less than or equal to 100
+    if (wordCount <= 20) {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
+
   const handlePhoneChange = (value) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -142,18 +160,16 @@ const ScanForm = () => {
   };
 
   const handleNextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, 4)); // Limit to 4 pages
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, 5)); 
   };
 
   const handleSkipPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, 4)); // Skip current page
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, 5)); // Skip current page
   };
 
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1)); // Limit to 1 page
   };
-
- 
 
   const handleSocialChange = (selectedOption) => {
     setFormData({
@@ -197,22 +213,6 @@ const ScanForm = () => {
     return url.length > maxLength ? `${url.slice(0, maxLength)}...` : url;
   };
 
-  // const handleUploadChange = (info) => {
-  //   if (info.file.status === "uploading") {
-  //     setUploading(true);
-  //   }
-  //   if (info.file.status === "done") {
-  //     const imageUrl = info.file.response.secure_url;
-  //     setImageUrl(imageUrl);
-  //     message.success(`${info.file.name} fichier téléchargé avec succès`);
-  //     setUploading(false);
-  //   } else if (info.file.status === "error") {
-  //     console.error("Erreur de téléchargement:", info.file.error, info.file.response);
-  //     message.error(`${info.file.name} échec du téléchargement du fichier.`);
-  //     setUploading(false);
-  //   }
-  // };
-
   const handleUploadChange = (info) => {
     if (info.file.status === "uploading") {
       setUploading(true);
@@ -249,12 +249,14 @@ const ScanForm = () => {
     showUploadList: false,
     onChange: handleUploadChange,
   };
+
   const handleDeleteImage = () => {
     setImageUrl(""); // Clear the displayed image URL
     setFormData({ imageUrl: "" });
     setFormData((prevData) => ({ ...prevData, imageUrl: "" })); // Clear the formData URL if necessary
     message.success("Image removed successfully");
   };
+ 
 
   const handleUploadedChange = (info) => {
     if (info.file.status === "uploading") {
@@ -283,6 +285,12 @@ const ScanForm = () => {
     }
   };
 
+  const handleDeletePortfolioImage = () => {
+    setImageUrl(""); // Clear the displayed image URL
+    setFormData({ portfolioUrl: "" });
+    setFormData((prevData) => ({ ...prevData, portfolioUrl: "" })); // Clear the formData URL if necessary
+    message.success("Image removed successfully");
+  };
 
   const uploadProp = {
     name: "file",
@@ -294,7 +302,7 @@ const ScanForm = () => {
     onChange: handleUploadedChange,
     multiple: true,
   };
-  console.log('uploadProp:', uploadProp);
+
 
   const handleDeleteImages = (index) => {
     const updatedImages = formData.portfolioImages.filter(
@@ -307,7 +315,6 @@ const ScanForm = () => {
     console.log("updatedImages:", updatedImages);
     message.success("Image removed successfully");
   };
-
 
   const handleAddVideo = () => {
     const id = extractYouTubeID(formData.videoUrl);
@@ -327,6 +334,44 @@ const ScanForm = () => {
       /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube.com\/embed\/)([^"&?/ ]{11})/
     );
     return match ? match[1] : null;
+  };
+
+
+  const handleUploadPortfolioChange = (info) => {
+    if (info.file.status === "uploading") {
+      setUploading(true);
+    }
+
+    if (info.file.status === "done") {
+      const portfolioImage = info.file.response.secure_url;
+
+      // Set imageUrl to trigger rerender
+      setPortfolioImages(portfolioImage);
+
+      // Update formData if necessary for consistency
+      setFormData((prevData) => ({ ...prevData, portfolioImage }));
+
+      message.success(`${info.file.name} fichier téléchargé avec succès`);
+      setUploading(false);
+    } else if (info.file.status === "error") {
+      console.error(
+        "Erreur de téléchargement:",
+        info.file.error,
+        info.file.response
+      );
+      message.error(`${info.file.name} échec du téléchargement du fichier.`);
+      setUploading(false);
+    }
+  };
+
+  const uploadPro = {
+    name: "file",
+    action: "https://api.cloudinary.com/v1_1/dltbbvgop/image/upload",
+    data: {
+      upload_preset: "Myinfo",
+    },
+    showUploadList: false,
+    onChange: handleUploadPortfolioChange,
   };
 
   if (redirect) {
@@ -352,7 +397,7 @@ const ScanForm = () => {
         </button>
       </div>
       <div className="flex justify-center mt-8 items-center p-2">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
+        <div className="bg-white p-2 rounded-lg shadow-lg w-full max-w-2xl">
           {currentPage === 1 && (
             <div>
               <h3 className="text-2xl font-bold mb-2">
@@ -585,12 +630,110 @@ const ScanForm = () => {
               </form>
             </div>
           )}
+           {currentPage === 3 && (
+    <div>
+      <h3 className="text-2xl font-bold mb-2">Portfolio Information</h3>
+      <p className="mb-4 text-gray-600">Upload your portfolio details below</p>
+      
+      <form onSubmit={handleSubmit}>
+        {/* Flex container for Image Upload and Portfolio Details */}
+        <div className="flex items-start gap-8">
+          
+          {/* Left: Image Upload Section */}
+          <div className="flex flex-col items-center">
+            {formData.portfolioImage ? (
+              <div className="relative">
+                <img
+                  src={formData.portfolioImage}
+                  alt="Uploaded"
+                  className="w-32 h-32 mb-4 border border-gray-300 rounded-md object-cover"
+                />
+                <Button
+                  icon={<DeleteOutlined />}
+                  danger
+                  onClick={handleDeletePortfolioImage}
+                  className="absolute top-1 right-1"
+                />
+              </div>
+            ) : (
+              <div className="flex flex-col items-center mb-6">
+                <span className="mb-2 text-gray-500">📁</span>
+                <span className="text-gray-500">Portfolio Image</span>
+              </div>
+            )}
 
-          {currentPage === 3 && (
+            {/* Upload Button */}
+            <Upload {...uploadPro}>
+              <Button icon={<UploadOutlined />} loading={uploading}>
+                Upload
+              </Button>
+            </Upload>
+          </div>
+          
+          {/* Right: Portfolio URL, Title, and Description */}
+          <div className="flex-1">
+            {/* Portfolio URL */}
+            <div className="mb-4">
+              <label htmlFor="portfolioUrl" className="block mb-2 text-sm font-medium">
+                Portfolio URL
+              </label>
+              <input
+                type="text"
+                id="portfolioUrl"
+                name="portfolioUrl"
+                value={formData.website}
+                onChange={handleChange}
+                className="border-0 border-b border-gray-500 p-1 w-full text-sm placeholder-gray-700 focus:outline-none focus:border-b-2 focus:border-gray-500"
+                placeholder="https://yourportfolio.com"
+               
+              />
+            </div>
+
+            {/* Portfolio Title */}
+            <div className="mb-4">
+              <label htmlFor="portfolioTitle" className="block mb-2 text-sm font-medium">
+                Portfolio Title
+              </label>
+              <input
+                type="text"
+                id="portfolioTitle"
+                name="portfolioTitle"
+                value={formData.portfolioTitle}
+                onChange={handleChange}
+                className="border-0 border-b border-gray-500 p-1 w-full text-sm placeholder-gray-700 focus:outline-none focus:border-b-2 focus:border-gray-500"
+                placeholder="Your Portfolio Title"
+               
+              />
+            </div>
+
+            {/* Portfolio Description */}
+            <div className="mb-4">
+              <label htmlFor="portfolioDescription" className="block mb-2 text-sm font-medium">
+                Portfolio Description
+              </label>
+              <textarea
+                id="portfolioDescription"
+                name="portfolioDescription"
+                value={formData.portfolioDescription}
+                onChange={handleChangeWithWordLimit}
+                className="border-0 border-b border-gray-500 p-1 w-full text-sm placeholder-gray-700 focus:outline-none focus:border-b-2 focus:border-gray-500"
+                placeholder="Describe your portfolio"
+                rows="3"
+              
+              />
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  )}
+
+          {currentPage === 4 && (
             <div>
               <h3 className="text-2xl font-bold mb-2">À Propos de Vous</h3>
               <p className="mb-4 text-gray-600">
-              Veuillez télécharger les photos de votre société pour mettre en valeur votre portfolio.
+                Veuillez télécharger les photos de votre société pour mettre en
+                valeur votre portfolio.
               </p>
               <form onSubmit={handleSubmit}>
                 <div className="mb-4 flex items-start">
@@ -665,7 +808,7 @@ const ScanForm = () => {
             </div>
           )}
 
-          {currentPage === 4 && (
+          {currentPage === 5 && (
             <div>
               <h3 className="text-xl font-bold mb-2">Add Social Links</h3>
               <p className="mb-4 text-gray-600">
@@ -726,16 +869,15 @@ const ScanForm = () => {
                 </ul>
               </div>
 
-              {/* Add YouTube Video Upload */}
-              {/* <div className="mb-4 mt-12">
+              <div className="mb-4 mt-12">
                 <h3 className="text-xl font-bold mb-2">Add YouTube Video</h3>
                 <input
                   type="url"
                   placeholder="Enter YouTube Video URL"
-                  value={formData.videoUrl} // Assuming you have a videoUrl field in formData
+                  value={formData.videoUrl}
                   onChange={(e) =>
                     setFormData({ ...formData, videoUrl: e.target.value })
-                  } // Update the state
+                  }
                   className="border-0 border-b border-gray-500 p-1 w-full text-sm placeholder-gray-700 focus:outline-none focus:border-b-2 focus:border-gray-500"
                   required
                 />
@@ -746,73 +888,34 @@ const ScanForm = () => {
                 >
                   Add Video
                 </button>
-              </div> */}
-<div className="mb-4 mt-12">
-      <h3 className="text-xl font-bold mb-2">Add YouTube Video</h3>
-      <input
-        type="url"
-        placeholder="Enter YouTube Video URL"
-        value={formData.videoUrl}
-        onChange={(e) =>
-          setFormData({ ...formData, videoUrl: e.target.value })
-        }
-        className="border-0 border-b border-gray-500 p-1 w-full text-sm placeholder-gray-700 focus:outline-none focus:border-b-2 focus:border-gray-500"
-        required
-      />
-      <button
-        type="button"
-        onClick={handleAddVideo}
-        className="mt-2 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600"
-      >
-        Add Video
-      </button>
 
-      {isVideoAdded && videoID && (
-        <div className="mt-4">
-           <div className="flex justify-center mt-4">
-          <div className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2">
-            <YouTube
-              videoId={videoID}
-              opts={{
-                width: '100%',
-                height: '315',
-                playerVars: {
-                  autoplay: 0,
-                  controls: 1,
-                  modestbranding: 1,
-                },
-              }}
-              className="youtube-video"
-            />
-          </div>
-        </div>
-        </div>
-      )}
-    </div>
-              {/* Display YouTube Video */}
-              {/* {formData.videoUrl && (
-                <div className="mb-4">
-                  <h4 className="text-lg font-bold">Uploaded Video:</h4>
-                  <iframe
-                    width="560"
-                    height="315"
-                    src={`https://www.youtube.com/embed/${getYouTubeId(
-                      formData.videoUrl
-                    )}`} // Extract the YouTube ID and embed
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="mt-2 w-[100%] h-[315px] rounded-md"
-                  ></iframe>
-                </div>
-              )} */}
+                {isVideoAdded && videoID && (
+                  <div className="mt-4">
+                    <div className="flex justify-center mt-4">
+                      <div className="w-full sm:w-3/4 md:w-2/3 lg:w-1/2">
+                        <YouTube
+                          videoId={videoID}
+                          opts={{
+                            width: "100%",
+                            height: "315",
+                            playerVars: {
+                              autoplay: 0,
+                              controls: 1,
+                              modestbranding: 1,
+                            },
+                          }}
+                          className="youtube-video"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
-          {/* Navigation Buttons */}
           <div className="flex justify-center mt-12">
-            {currentPage < 4 ? (
+            {currentPage < 5 ? (
               <button
                 type="button"
                 onClick={handleNextPage}
