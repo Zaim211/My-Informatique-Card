@@ -97,7 +97,7 @@ const Portfolio = () => {
               </div>
             </div>
 
-            <div className="flex gap-4 items-center bg-white border p-2 rounded-lg mt-6">
+            {/* <div className="flex gap-4 items-center bg-white border p-2 rounded-lg mt-6">
               <img
                 src={data.imageUrl}
                 alt="Profile"
@@ -115,11 +115,7 @@ const Portfolio = () => {
                   {data.jobTitle}
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="text-left mt-4 pl-2">
+              <div className="text-end mt-4 pl-12">
           <Link
             to={`/cardUser/${userId}`}
             className="bg-black text-white px-2 py-4 rounded-lg font-bold"
@@ -127,6 +123,78 @@ const Portfolio = () => {
             Mettre à jour votre Portfolio
           </Link>
         </div>
+            </div> */}
+          
+             {/* <div className="flex justify-between items-start bg-white border p-2 rounded-lg mt-6">
+  <div className="flex gap-4 items-center">
+    <img
+      src={data.imageUrl}
+      alt="Profile"
+      className="w-36 h-36 object-contain border mb-4 md:mb-0"
+    />
+
+    <div className="text-center md:text-left">
+      <h2 className="text-2xl font-bold text-black">
+        {data.firstName} <br /> {data.lastName}
+      </h2>
+      <p className="text-lg text-black font-semibold mt-2">
+        @{data.company}
+      </p>
+      <p className="text-lg text-black font-semibold mt-2">
+        {data.jobTitle}
+      </p>
+    </div>
+  </div>
+
+  <div className="mt-4">
+    <Link
+      to={`/cardUser/${userId}`}
+      className="bg-black text-white px-4 py-2 rounded-lg font-bold"
+    >
+      Mettre à jour votre Portfolio
+    </Link>
+  </div>
+            </div> */}
+            <div className="flex flex-col md:flex-row gap-4 bg-white border p-2 rounded-lg mt-6">
+  <div className="flex items-center">
+    <img
+      src={data.imageUrl}
+      alt="Profile"
+      className="w-36 h-36 object-contain border mb-4 md:mb-0"
+    />
+    <div className="text-center md:text-left ml-4">
+      <h2 className="text-2xl font-bold text-black">
+        {data.firstName} <br /> {data.lastName}
+      </h2>
+      <p className="text-lg text-black font-semibold mt-2">
+        @{data.company}
+      </p>
+      <p className="text-lg text-black font-semibold mt-2">
+        {data.jobTitle}
+      </p>
+    </div>
+  </div>
+  
+  {/* <div className="mt-4 mb-2 md:mt-0 text-right md:text-right">
+    <Link
+      to={`/cardUser/${userId}`}
+      className="bg-black text-white px-4 py-2 rounded-lg font-bold"
+    >
+      Mettre à jour votre Portfolio
+    </Link>
+  </div> */}
+</div>
+
+
+
+          </div>
+        </div>
+        <div className="flex justify-between mt-4 p-2">
+        <Link to="/add-contact" className="bg-black text-white font-semibold py-4 px-4 rounded-lg shadow-md">Ajouter aux contacts</Link>
+        <Link to="/share-info" className="bg-black text-white font-semibold py-4 px-4 rounded-lg shadow-md">Partager mes infos</Link>
+      </div>
+
+       
 
         <div className="mt-2 p-2">
           {data.bio && (
@@ -533,11 +601,33 @@ const Portfolio = () => {
         </div>
       </div>
 
-      <div className="mt-12">
+      {/* <div className="mt-12">
         <footer className="border-t max-w-4xl rounded-t-lg mx-auto bg-black pt-4 mt-6 pb-4 text-center text-white">
           © {new Date().getFullYear()} My Informatique. All rights reserved.
         </footer>
-      </div>
+      </div> */}
+      <div className="mt-12 flex-1 max-w-4xl mx-auto">
+
+<footer className="mt-4 p-4 bg-black border-t">
+        <h2 className="text-xl text-white font-semibold mb-2">MyInformatique</h2>
+        <p className="text-white font-semibold">
+        Imadeddine et des milliers d'autres professionnels utilisent My Informatique chaque jour pour rester en contact avec leurs clients et partenaires, partager des informations essentielles et développer leur rése
+        </p>
+        <div className="mt-6 flex justify-between items-center gap-4">
+          <button className="bg-white text-black font-semibold py-2 px-4 rounded-lg">
+           <Link to="/Order">Obtenir ma carte</Link>
+          </button>
+          <button className="bg-white text-black font-semibold py-2 px-4 rounded-lg">
+            <Link to="/SignIn">Se Connecter</Link>
+          </button>
+        </div>
+      </footer>
+
+{/* Copyright Notice */}
+<div className="text-center text-white pb-2 bg-black pt-4">
+  © {new Date().getFullYear()} My Informatique. All rights reserved.
+</div>
+</div>
     </>
   );
 };
