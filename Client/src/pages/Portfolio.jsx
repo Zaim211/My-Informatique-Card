@@ -175,13 +175,13 @@ const Portfolio = () => {
         <div className="flex justify-between mt-4 p-2">
           <Link
             to=""
-            className="bg-black text-white font-semibold py-4 px-4 rounded-lg shadow-md"
+            className="bg-black text-white font-semibold py-2 px-2 rounded-lg shadow-md"
           >
             Ajouter aux contacts
           </Link>
           <Link
             to=""
-            className="bg-black text-white font-semibold py-4 px-4 rounded-lg shadow-md"
+            className="bg-black text-white font-semibold py-2 px-2 rounded-lg shadow-md"
           >
             Partager mes infos
           </Link>
