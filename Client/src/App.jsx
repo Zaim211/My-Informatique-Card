@@ -10,6 +10,7 @@ import SignIn from './pages/SignIn';
 import AccountCreation from './pages/AccountCreation';
 import ConfirmationAccount from './pages/ConfirmationAccount'
 import Confirmation from './pages/Confirmation';
+import { LanguageProvider } from './LanguageContext';
 
 
 axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
@@ -19,7 +20,10 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        
+        <Route path="/" element={<LanguageProvider>
+              <Home />
+            </LanguageProvider>} />
         <Route path="/cardUser/:userId" element={<ScanForm />} />
         <Route path='/SignIn' element={<SignIn />} />
         <Route path='/register' element={<AccountCreation />} />
