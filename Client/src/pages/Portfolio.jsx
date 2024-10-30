@@ -15,6 +15,11 @@ import {
 } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import YouTube from "react-youtube";
+import { useLanguage } from "../LanguageContext";
+// import { Translate } from '@google-cloud/translate';
+
+
+
 
 const Portfolio = () => {
   const [data, setData] = useState({});
@@ -23,6 +28,32 @@ const Portfolio = () => {
   const { userId } = useParams();
   const [currentImage, setCurrentImage] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const { language, toggleLanguage } = useLanguage();
+  // const translate = new Translate({ key: 'AIzaSyBsiNnfka5ZhygmI3jMtxHezgw5opk945I' });
+
+  // useEffect(() => {
+  //   const translateData = async () => {
+  //     if (language === "FR") {
+  //       try {
+  //         const [translatedJobTitle] = await translate.translate(data.jobTitle, "fr");
+  //         const [translatedBio] = await translate.translate(data.bio, "fr");
+  //         const [translatedPortfolioDescription] = await translate.translate(data.portfolioDescription, "fr");
+
+  //         setTranslatedData({
+  //           jobTitle: translatedJobTitle,
+  //           bio: translatedBio,
+  //           portfolioDescription: translatedPortfolioDescription,
+  //         });
+  //       } catch (err) {
+  //         console.error("Error translating data:", err);
+  //       }
+  //     } else {
+  //       setTranslatedData(data); // Use original data for English
+  //     }
+  //   };
+
+  //   translateData();
+  // }, [language, data]);
 
   const openModal = (imageUrl) => {
     setCurrentImage(imageUrl);
@@ -63,6 +94,44 @@ const Portfolio = () => {
     return match ? match[1] : null;
   };
 
+
+  const content = {
+    EN: {
+      title: "About Me",
+      description: "Hello! I’m a passionate software developer with expertise in both front-end and back-end development, eager to create impactful digital solutions that bridge design and functionality. With a strong foundation in languages and frameworks like JavaScript, NodeJS, React, and Vue, I’ve built applications that are both user-friendly and robust.",
+      contactTitle: "Contact Details",
+      socialMediaTitle: "Social Media",
+      url: "Links",
+      videoTitle: "Video",
+      imageTitle: "Images",
+      portfolioTitle: "My Portfolio",
+      portfolioDescription: "Hello! I’m a passionate software developer with expertise in both front-end and back-end.",
+      footerTitle: "My Informatique",
+      footerDescription:
+        "Imadeddine and thousands of other professionals use My Informatique every day to stay connected with their clients and partners, share essential information, and grow their network.",
+      footerButton1: "Get My Card",
+      footerButton2: "Sign In",
+    },
+    FR: {
+      title: "À propos",
+      description: "Bonjour! Je suis un développeur de logiciels passionné avec une expertise tant dans le développement front-end que back-end, désireux de créer des solutions numériques impactantes qui relient design et fonctionnalité. Avec une solide expérience dans des langages et frameworks tels que JavaScript, NodeJS, React et Vue, j'ai construit des applications à la fois conviviales et robustes.",
+      url: "Liens",
+      contactTitle: "Coordonnées",
+      socialMediaTitle: "Réseaux sociaux",
+      videoTitle: "Vidéo",
+      imageTitle: "Photos",
+      portfolioTitle: "Mon portfolio",
+      footerTitle: "My Informatique",
+      portfolioDescription: "Bonjour! Je suis un développeur de logiciels passionné avec une expertise tant dans le développement front-end que back-end.",
+      footerDescription:
+      "Imadeddine et des milliers d'autres professionnels utilisent My Informatique chaque jour pour rester en contact avec leurs clients et partenaires, partager des informations essentielles et développer leur réseau.",
+    footerButton1: "Obtenir ma carte",
+    footerButton2: "Se Connecter",
+    }
+  };
+  const translatedContent = data.translations?.[language] || data.translations?.EN || {};
+  console.log('translatedContent', translatedContent);
+
   return (
     <>
       <div className="md:max-w-4xl flex-1 mx-auto  bg-white shadow-lg rounded-lg  mb-4 md:p-8">
@@ -72,135 +141,57 @@ const Portfolio = () => {
           <div className="absolute inset-0 top-1/4 h-1/4 bg-black z-0"></div>
 
           <div className="relative z-10">
+          
             <div className="flex items-center justify-between p-2">
-              <h1 className="text-white font-bold text-xl text-center ">
-                Myinformatique
-              </h1>
+            <h1 className="text-white font-bold text-xl text-center">Myinformatique</h1>
+            <select onChange={toggleLanguage} value={language} className="text-black bg-white p-2 rounded-lg">
+              <option value="EN">EN</option>
+              <option value="FR">FR</option>
+            </select>
+      
+            </div>
+            <div className="flex flex-col md:flex-row gap-4 bg-white border p-2 rounded-lg mt-6">
               <div className="flex items-center">
-                <button className="text-white px-2 py-2 rounded-lg font-bold">
-                  <Link to={`/cardUser/${userId}`}>Se déconnecté</Link>
-                </button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="size-6 text-white"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-                  />
-                </svg>
+                <img
+                  src={data.imageUrl}
+                  alt="Profile"
+                  className="w-36 h-36 object-contain border mb-4 md:mb-0"
+                />
+                <div className="text-center md:text-left ml-4">
+                  <h2 className="text-2xl font-bold text-black">
+                    {data.firstName} <br /> {data.lastName}
+                  </h2>
+                  <p className="text-lg text-black font-semibold mt-2">
+                    @{data.company}
+                  </p>
+                  <p className="text-lg text-black font-semibold mt-2">
+                  {translatedContent.jobTitle || data.jobTitle}
+                  </p>
+                </div>
               </div>
             </div>
-
-            {/* <div className="flex gap-4 items-center bg-white border p-2 rounded-lg mt-6">
-              <img
-                src={data.imageUrl}
-                alt="Profile"
-                className="w-36 h-36  object-contain border mb-4 md:mb-0"
-              />
-
-              <div className="text-center md:text-left">
-                <h2 className="text-2xl font-bold text-black">
-                  {data.firstName} <br /> {data.lastName}
-                </h2>
-                <p className="text-lg text-black font-semibold mt-2">
-                  @{data.company}
-                </p>
-                <p className="text-lg text-black font-semibold mt-2">
-                  {data.jobTitle}
-                </p>
-              </div>
-              <div className="text-end mt-4 pl-12">
-          <Link
-            to={`/cardUser/${userId}`}
-            className="bg-black text-white px-2 py-4 rounded-lg font-bold"
-          >
-            Mettre à jour votre Portfolio
-          </Link>
-        </div>
-            </div> */}
-          
-             {/* <div className="flex justify-between items-start bg-white border p-2 rounded-lg mt-6">
-  <div className="flex gap-4 items-center">
-    <img
-      src={data.imageUrl}
-      alt="Profile"
-      className="w-36 h-36 object-contain border mb-4 md:mb-0"
-    />
-
-    <div className="text-center md:text-left">
-      <h2 className="text-2xl font-bold text-black">
-        {data.firstName} <br /> {data.lastName}
-      </h2>
-      <p className="text-lg text-black font-semibold mt-2">
-        @{data.company}
-      </p>
-      <p className="text-lg text-black font-semibold mt-2">
-        {data.jobTitle}
-      </p>
-    </div>
-  </div>
-
-  <div className="mt-4">
-    <Link
-      to={`/cardUser/${userId}`}
-      className="bg-black text-white px-4 py-2 rounded-lg font-bold"
-    >
-      Mettre à jour votre Portfolio
-    </Link>
-  </div>
-            </div> */}
-            <div className="flex flex-col md:flex-row gap-4 bg-white border p-2 rounded-lg mt-6">
-  <div className="flex items-center">
-    <img
-      src={data.imageUrl}
-      alt="Profile"
-      className="w-36 h-36 object-contain border mb-4 md:mb-0"
-    />
-    <div className="text-center md:text-left ml-4">
-      <h2 className="text-2xl font-bold text-black">
-        {data.firstName} <br /> {data.lastName}
-      </h2>
-      <p className="text-lg text-black font-semibold mt-2">
-        @{data.company}
-      </p>
-      <p className="text-lg text-black font-semibold mt-2">
-        {data.jobTitle}
-      </p>
-    </div>
-  </div>
-  
-  {/* <div className="mt-4 mb-2 md:mt-0 text-right md:text-right">
-    <Link
-      to={`/cardUser/${userId}`}
-      className="bg-black text-white px-4 py-2 rounded-lg font-bold"
-    >
-      Mettre à jour votre Portfolio
-    </Link>
-  </div> */}
-</div>
-
-
-
           </div>
         </div>
         <div className="flex justify-between mt-4 p-2">
-        <Link to="/add-contact" className="bg-black text-white font-semibold py-4 px-4 rounded-lg shadow-md">Ajouter aux contacts</Link>
-        <Link to="/share-info" className="bg-black text-white font-semibold py-4 px-4 rounded-lg shadow-md">Partager mes infos</Link>
-      </div>
-
-       
+          <Link
+            to=""
+            className="bg-black text-white font-semibold py-4 px-4 rounded-lg shadow-md"
+          >
+            Ajouter aux contacts
+          </Link>
+          <Link
+            to=""
+            className="bg-black text-white font-semibold py-4 px-4 rounded-lg shadow-md"
+          >
+            Partager mes infos
+          </Link>
+        </div>
 
         <div className="mt-2 p-2">
           {data.bio && (
             <div>
               <h1 className="text-black items-center justify-between flex  font-bold text-2xl mb-4 mt-4">
-                A propos:
+              {content[language].title}:
                 <div className="flex items-center justify-center gap-2">
                   <Link to={`/cardUser/${userId}`} className="ml-2 text-black">
                     <FaEdit className="inline text-2xl" />
@@ -221,14 +212,16 @@ const Portfolio = () => {
                   </svg>
                 </div>
               </h1>
-              <p className="text-black font-semibold">{data.bio}</p>
+              <p className="text-black font-semibold">
+              {translatedContent.bio || data.bio}
+              </p>
             </div>
           )}
         </div>
 
         <div className="space-y-2 mt-4 p-2">
           <h1 className="text-black items-center justify-between flex  font-bold text-2xl mb-4 mt-4">
-            Coordonnées:
+          {content[language].contactTitle}:
             <div className="flex items-center justify-center gap-2">
               <Link to={`/cardUser/${userId}`} className="ml-2 text-black">
                 <FaEdit className="inline text-2xl" />
@@ -339,80 +332,79 @@ const Portfolio = () => {
           </div>
         </div> */}
         <div className="space-y-2 mt-2 p-2">
-  <h1 className="text-black items-center justify-between flex font-bold text-2xl mb-4 mt-4">
-    Liens:
-    <div className="flex items-center justify-center gap-2">
-      <Link to={`/cardUser/${userId}`} className="ml-2 text-black">
-        <FaEdit className="inline text-2xl" />
-      </Link>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        strokeWidth="1.5"
-        stroke="currentColor"
-        className="size-8 mt-3"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-        />
-      </svg>
-    </div>
-  </h1>
-  {/* Portfolio Details Section */}
-  <div className="flex items-center gap-4">
-    {/* Left: Portfolio Image */}
-    <div className="flex-shrink-0">
-      <img
-        src={data.portfolioImage} // Use your image URL here
-        alt="Portfolio"
-        className="w-32 h-32 object-cover" // Changed height to full
-      />
-    </div>
+          <h1 className="text-black items-center justify-between flex font-bold text-2xl mb-4 mt-4">
+            {content[language].url}:
+            <div className="flex items-center justify-center gap-2">
+              <Link to={`/cardUser/${userId}`} className="ml-2 text-black">
+                <FaEdit className="inline text-2xl" />
+              </Link>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="size-8 mt-3"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                />
+              </svg>
+            </div>
+          </h1>
+          {/* Portfolio Details Section */}
+          <div className="flex items-center gap-4">
+            {/* Left: Portfolio Image */}
+            <div className="flex-shrink-0">
+              <img
+                src={data.portfolioImage} // Use your image URL here
+                alt="Portfolio"
+                className="w-32 h-32 object-cover" // Changed height to full
+              />
+            </div>
 
-    {/* Right: Portfolio URL, Title, and Description */}
-    <div className="flex-1 flex flex-col justify-center">
-  {/* Portfolio URL */}
-  <div className="flex items-center mb-2">
-   
-    <a
-      href={data.website}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-gray-600 font-bold"
-    >
-      {data.website}
-    </a>
-  </div>
-  
-  {/* Separator Line */}
-  <hr className="border-gray-300 mb-2" />
+            {/* Right: Portfolio URL, Title, and Description */}
+            <div className="flex-1 flex flex-col justify-center">
+              {/* Portfolio URL */}
+              <div className="flex items-center mb-2">
+                <a
+                  href={data.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 font-bold"
+                >
+                  {data.website}
+                </a>
+              </div>
 
-  {/* Portfolio Title */}
-  <div className="mb-1">
-    <p className="text-gray-600 font-bold">{data.portfolioTitle}</p>
-  </div>
-  
-  {/* Separator Line */}
-  <hr className="border-gray-300 mb-2" />
+              {/* Separator Line */}
+              <hr className="border-gray-300 mb-2" />
 
-  {/* Portfolio Description */}
-  <div className="mb-1">
-    <p className="text-gray-600 font-bold">{data.portfolioDescription}</p>
-  </div>
-</div>
+              {/* Portfolio Title */}
+              <div className="mb-1">
+                <p className="text-gray-600 font-bold">{data.portfolioTitle}</p>
+              </div>
 
-  </div>
-</div>
+              {/* Separator Line */}
+              <hr className="border-gray-300 mb-2" />
 
+              {/* Portfolio Description */}
+              <div className="mb-1">
+                <p className="text-gray-600 font-bold">
+                  {data.portfolioDescription}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div className="mt-4 space-y-6 p-2">
           {data.socialLinks && Object.keys(data.socialLinks).length > 0 && (
             <div>
               <h1 className="text-black items-center justify-between flex  font-bold text-2xl mb-4 mt-12">
-                Réseaux sociaux:
+                {content[language].socialMediaTitle}:
                 <div className="flex items-center justify-center gap-2">
                   <Link to={`/cardUser/${userId}`} className="ml-2 text-black">
                     <FaEdit className="inline text-2xl" />
@@ -493,7 +485,7 @@ const Portfolio = () => {
           {data.videoUrl && (
             <div>
               <h1 className="text-black items-center justify-between flex  font-bold text-2xl mb-4 mt-12">
-                Video:
+                {content[language].videoTitle}:
                 <div className="flex items-center justify-center gap-2">
                   <Link to={`/cardUser/${userId}`} className="ml-2 text-black">
                     <FaEdit className="inline text-2xl" />
@@ -535,7 +527,7 @@ const Portfolio = () => {
             {data.portfolioImages && data.portfolioImages.length > 0 && (
               <div>
                 <h1 className="text-black items-center justify-between flex  font-bold text-2xl mb-4 mt-4">
-                  Images:
+                  {content[language].imageTitle}:
                   <div className="flex items-center justify-center gap-2">
                     <Link
                       to={`/cardUser/${userId}`}
@@ -601,24 +593,42 @@ const Portfolio = () => {
         </div>
       </div>
 
-      {/* <div className="mt-12">
-        <footer className="border-t max-w-4xl rounded-t-lg mx-auto bg-black pt-4 mt-6 pb-4 text-center text-white">
-          © {new Date().getFullYear()} My Informatique. All rights reserved.
+      {/* <div className="mt-12 flex-1 max-w-4xl mx-auto">
+        <footer className="mt-4 p-4 bg-black border-t">
+          <h2 className="text-xl text-white font-semibold mb-2">
+            MyInformatique
+          </h2>
+          <p className="text-white font-semibold">
+            Imadeddine et des milliers d'autres professionnels utilisent My
+            Informatique chaque jour pour rester en contact avec leurs clients
+            et partenaires, partager des informations essentielles et développer
+            leur rése
+          </p>
+          <div className="mt-6 flex justify-between items-center gap-4">
+            <button className="bg-white text-black font-semibold py-2 px-4 rounded-lg">
+              <Link to="/Order">Obtenir ma carte</Link>
+            </button>
+            <button className="bg-white text-black font-semibold py-2 px-4 rounded-lg">
+              <Link to="/SignIn">Se Connecter</Link>
+            </button>
+          </div>
         </footer>
+
+        <div className="text-center text-white pb-2 bg-black pt-4">
+          © {new Date().getFullYear()} My Informatique. All rights reserved.
+        </div>
       </div> */}
       <div className="mt-12 flex-1 max-w-4xl mx-auto">
 
 <footer className="mt-4 p-4 bg-black border-t">
-        <h2 className="text-xl text-white font-semibold mb-2">MyInformatique</h2>
-        <p className="text-white font-semibold">
-        Imadeddine et des milliers d'autres professionnels utilisent My Informatique chaque jour pour rester en contact avec leurs clients et partenaires, partager des informations essentielles et développer leur rése
-        </p>
+        <h2 className="text-xl text-white font-semibold mb-2">{content[language].footerTitle}</h2>
+        <p className="text-white font-semibold">{content[language].footerDescription}</p>
         <div className="mt-6 flex justify-between items-center gap-4">
           <button className="bg-white text-black font-semibold py-2 px-4 rounded-lg">
-           <Link to="/Order">Obtenir ma carte</Link>
+           <Link to="/Order">{content[language].footerButton1}</Link>
           </button>
           <button className="bg-white text-black font-semibold py-2 px-4 rounded-lg">
-            <Link to="/SignIn">Se Connecter</Link>
+            <Link to="/SignIn">{content[language].footerButton2}</Link>
           </button>
         </div>
       </footer>

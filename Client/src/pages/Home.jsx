@@ -23,6 +23,7 @@ const Home = () => {
       description: "Hello! I’m a passionate software developer with expertise in both front-end and back-end development, eager to create impactful digital solutions that bridge design and functionality. With a strong foundation in languages and frameworks like JavaScript, NodeJS, React, and Vue, I’ve built applications that are both user-friendly and robust.",
       contactTitle: "Contact Details",
       socialMediaTitle: "Social Media",
+      url: "Links",
       videoTitle: "Video",
       imageTitle: "Images",
       portfolioTitle: "My Portfolio",
@@ -36,7 +37,7 @@ const Home = () => {
     FR: {
       title: "À propos",
       description: "Bonjour! Je suis un développeur de logiciels passionné avec une expertise tant dans le développement front-end que back-end, désireux de créer des solutions numériques impactantes qui relient design et fonctionnalité. Avec une solide expérience dans des langages et frameworks tels que JavaScript, NodeJS, React et Vue, j'ai construit des applications à la fois conviviales et robustes.",
-
+      url: "Liens",
       contactTitle: "Coordonnées",
       socialMediaTitle: "Réseaux sociaux",
       videoTitle: "Vidéo",
